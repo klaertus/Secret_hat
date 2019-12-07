@@ -1,0 +1,11 @@
+#action = None               # Joystick action
+direction = None                # Joystick direction
+show_process = None               # Displaying message process
+pirate_box_start_time = None
+log_track_start_time = None        # Pirate box process starting time
+timer_process = None                #
+loading_process = None
+logs_process = None
+section = 1
+run = True
+timer_process = None
