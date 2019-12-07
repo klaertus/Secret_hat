@@ -1,4 +1,5 @@
 # Secret_Hat
+Raspberry Pi subsystem for the Sense Hat
 
 This project was developed as part of a competition organized by UClouvain. It contains many applications for a potential intelligence agency, adapted to be used on the Sense Hat.
 
@@ -31,7 +32,7 @@ Application displaying informations about the Raspberry and the Sense hat
 Application allowing to record logs and informations (time, ip, ping, Sense Hat temperature, pressure, humidity, orientation, compass, accelerometer, gyroscope and traceroute) and save them in saved_logs.txt.
 
 #### Timer
-Timer allowing to activate GPIOs, reset the Secret Hat or shutdown it.
+A timer allowing to activate GPIOs, reset the Secret Hat or shutdown it.
 
 #### Backdoor
 Simple backdoor using Facebook or Dataplicity.
