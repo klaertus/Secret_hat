@@ -22,9 +22,12 @@ cd Secret_hat
 *  Pirate box
 *  Settings
 
-#### Message encryption
-Application allowing to encrypt messages with the positions of the Sense Hat. Please consider that the lib used to encrypt messages and hash passwords is not secure, and has only been used as part of the competition.
 
+#### Message encryption
+Application allowing to encrypt messages with the positions of the Sense Hat. 
+
+| WARNING: Please consider that the lib used to encrypt messages and hash passwords is not secure, and has only been used as part of the competition! |
+| --- |
 #### System and board infos
 Application displaying informations about the Raspberry and the Sense hat.
 
