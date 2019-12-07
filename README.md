@@ -58,12 +58,12 @@ ssid2 = key2
 ssid3 = key3
 ```
 
-### Password configuration
+### Reset configuration
 
 There are three resetting mode:
 * Reset only all configuration, and deletes all messages
 * Delete all subsystem
-* Only block during a exponential time
+* Only block during a exponential time (only for main password)
 
 ### Applications
 Each application has his own config file. There are a global config file for displaying applications in main menu. Be careful when editing this file, because if there is an error, the main script will crash.
