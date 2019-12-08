@@ -1,5 +1,5 @@
-# Secret_Hat
-Raspberry Pi subsystem for the Sense Hat
+# Secret Hat
+A Raspberry Pi subsystem for the Sense Hat
 
 This project was developed as part of a competition organized by UClouvain. It contains many applications for a potential intelligence agency, adapted to be used on the Sense Hat.
 
