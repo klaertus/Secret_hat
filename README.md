@@ -7,7 +7,7 @@ This project was developed as part of a competition organized by UClouvain. It c
 ## Installation
 
 ```bash
-https://github.com/r4ma050/Secret_Hat.git
+https://github.com/r4ma050/Secret_hat.git
 cd Secret_hat
 ./install.sh
 ```
