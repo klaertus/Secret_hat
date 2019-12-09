@@ -61,13 +61,15 @@ ssid3 = key3
 ### Reset configuration
 
 There are three resetting mode:
-* Reset only all configuration, and deletes all messages
-* Delete all subsystem
-* Only block during a exponential time (only for main password)
+* Mode 1 : reset only all configuration, and deletes all messages (mode 1)
+* Mode 2 : Delete all subsystem
+* Mode 3 : Only block during a exponential time (only for main password)
 
-### Applications
-Each application has his own config file. There are a global config file for displaying applications in main menu. Be careful when editing this file, because if there is an error, the main script will crash.
+### Personalization
+Edit the colours of text and the speed of scrolling text in config.ini, like that
 ```
-[apps]
-app number = app script | App menu name 
+[personalization]
+color1 = [255,255,0]  # List or tuple
+color2 = [0,255,0]  # List or tuple
+speed = 0.05  # Float
 ```
