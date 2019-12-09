@@ -1,7 +1,6 @@
 from sense_hat import SenseHat
-from .lib.init import show_message_break, passed, get_joystick, loading, yes_no
-from .lib import globals
-
+from lib.init import *
+from lib import globals
 
 import os
 import time
@@ -44,23 +43,11 @@ def main(color1, color2, speed):
                             show_message_break("Pirate box started", color2, speed)
                             get_joystick()
                         passed()
-                        while globals.direction != 'middle' :
-                            show_message_break("Would you like to start AP?", color2, speed)
-                            get_joystick()
-                        passed()
-
-                        if yes_no(color2):
-                            if os.system('service hostapd start') == 0:
-                                globals.pirate_box_start_time = time.time()
-                                while globals.direction != 'middle' :
-                                    show_message_break("AP started", color2, speed)
-                                    get_joystick()
-                                passed()
-                            else:
-                                while globals.direction != 'middle':
-                                    show_message_break("Can't start hostapd service! Press OK", color2, speed)
-                                    get_joystick()
-                                passed()
+                        if os.system('systemctl is-active hostapd') == 0:
+                            while globals.direction != 'middle' :
+                                show_message_break("Please start AP in Settings/Wifi/Hotspot", color2, speed)
+                                get_joystick()
+                            passed()
                     else:
                         while globals.direction != 'middle':
                             show_message_break("Can't start apache2 service! Press OK", color2, speed)
@@ -73,22 +60,13 @@ def main(color1, color2, speed):
         while globals.direction != 'down' and globals.direction != 'up' and globals.direction != 'left' and globals.section == 1:
             show_message_break("2:Infos", color1, speed)
             get_joystick()
-            if globals.direction == 'left' :
-                passed()
-                run = False
-                break
             if globals.direction == 'middle' :
                 passed()
                 try:                # Check if the service has started
                     pid = os.popen('pgrep apache2').read().split('\n')
                     pid.reverse()
                     pid = pid[1]
-                except:
-                    while globals.direction != 'middle' :
-                        show_message_break("Piratebox not started", color2, speed)
-                        get_joystick()
-                    break
-                try:
+
                     connections = psutil.net_connections()
                     users = 0
                     for i in range(len(connections)):
@@ -101,15 +79,18 @@ def main(color1, color2, speed):
                         show_message_break("Started:{} min".format(round((time.time()-globals.pirate_box_start_time)/60, 2)), color2, speed)
                         get_joystick()
                     passed()
-                except:
-                    while globals.direction != 'middle' :
-                        show_message_break("Unable to get connections", color2, speed)
+
+                    while globals.direction != 'middle':
+                        show_message_break("Users:{}".format(users), color2, speed)
                         get_joystick()
                     passed()
-                while globals.direction != 'middle':
-                    show_message_break("Users:{}".format(users), color2, speed)
-                    get_joystick()
-                passed()
+
+                except:
+                    while globals.direction != 'middle' :
+                        show_message_break("Piratebox not started", color2, speed)
+                        get_joystick()
+                    passed()
+
 
         passed(1)
     passed()

@@ -1,29 +1,28 @@
 from sense_hat import SenseHat
-from lib.init import passed, show_message_break, loading, get_joystick, askmessage, askpassword, is_alive
+from lib.init import passed, show_message_break, loading, get_joystick, askmessage, askpassword, is_alive, yes_no
 from lib.encrypt import encode, decode, verify_pass
 from lib import globals
 
-from configparser import ConfigParser
+from configparser import ConfigParser, RawConfigParser
 from multiprocessing import Process
 import os
 from time import localtime, sleep
 import glob
+import ast
 
 sense = SenseHat()
 
-config = ConfigParser()
+config = RawConfigParser(allow_no_value = True)
 config.optionxform = str
-
-
-speed = 0.05
-color1 = [255,0,0]
-color2 = [255,255,0]
+config.optionxform = lambda option: option
 
 
 # Copy pasted from https://github.com/SteveAmor/Raspberry-Pi-Sense-Hat-Clock/blob/master/clock.py
+color1 = [100,0,0]
+color2 = [100,100,0]
 
 def clock(color1, color2):
-
+    sense.low_light = True
     number = [
     0,1,1,1, #zero
     0,1,0,1,
@@ -120,45 +119,95 @@ def clock(color1, color2):
         # Display the time
 
 
-        sense.low_light = True # Optional
+        #sense.low_light = True # Optional
         sense.set_pixels(clock_image)
 
 # End of copy pasted
 
+
 while True:
-    # Initialize configuration, create it if doesn't exist
-    try:
-        config.read('config.ini')
-        password_hash = config['main_password']['password_hash']
-        encrypt_random_a = config['main_password']['encrypt_random_a']
-        encrypt_random_b = config['main_password']['encrypt_random_b']
-        tries = int(config['main_password']['tries'])
-        remaining_tries = int(config['main_password']['remaining_tries'])
-        reset_mode = int(config['main_password']['reset_mode'])
-    except:
+    run = True
+    while run != 3:
+        # Initialize configuration
+        run = 0
+        error = None
         try:
+            config = RawConfigParser()
             config.read('config.ini')
-            config.remove_section('main_password')
-        except:
-            file = open('config.ini','w+')
-            file.close()
-            config.read('config.ini')
+            password_hash = config['main_password']['password_hash']
+            encrypt_random_a = config['main_password']['encrypt_random_a']
+            encrypt_random_b = config['main_password']['encrypt_random_b']
+            tries = int(config['main_password']['tries'])
+            remaining_tries = int(config['main_password']['remaining_tries'])
+            reset_mode = int(config['main_password']['reset_mode'])
 
-        config.add_section('main_password')
-        config.set('main_password', 'password_hash', '0')
-        config.set('main_password', 'tries', '-99')
-        config.set('main_password', 'remaining_tries', '-99')
-        config.set('main_password', 'encrypt_random_a', '')
-        config.set('main_password', 'encrypt_random_b', '')
-        config.set('main_password', 'reset_mode', '')
+            color1 = ast.literal_eval(config['personalization']['color1'])
+            color2 = ast.literal_eval(config['personalization']['color2'])
+            speed = float(config['personalization']['speed'])
+            brightness = bool(int(config['personalization']['low_light']))
 
-        tries = int(config['main_password']['tries'])
-        remaining_tries = int(config['main_password']['remaining_tries'])
-        password_hash = '0'
-        reset_mode = 0
+            password_precision = int(config['other']['password_precision'])
 
-        with open('config.ini', 'w') as configfile:
-            config.write(configfile)
+            wifi = config['wifi_keys']
+
+            run += 1
+        except Exception as error:
+            while globals.direction != 'middle' :
+                show_message_break('Error:{}'.format(error), [100,100,100], .05)
+                get_joystick()
+            passed()
+            while globals.direction != 'middle' :
+                show_message_break("Would you like to reset config?", [100,100,100], .05)
+                get_joystick()
+            passed()
+            if yes_no([100,100,100]):
+                os.system('cp backup/config.ini.backup config.ini')
+
+        try:
+            timer = RawConfigParser()
+            timer.read('apps/timer.ini')
+            time_left = timer['timer']['time']
+            list_gpio = timer['timer']['gpio']
+            shutdown = bool(timer['timer']['shutdown'])
+            reset_mode = bool(timer['timer']['reset_mode'])
+            run += 1
+        except Exception as error:
+            while globals.direction != 'middle' :
+                show_message_break('Error:{}'.format(error), [100,100,100], .05)
+                get_joystick()
+            passed()
+            while globals.direction != 'middle' :
+                show_message_break("Would you like to reset config?", [100,100,100], .05)
+                get_joystick()
+            passed()
+            if yes_no([100,100,100]):
+                os.system('cp backup/timer.ini.backup apps/timer.ini')
+
+        try:
+            track_infos = RawConfigParser()
+            track_infos.read('apps/logs.ini')
+            update_time = track_infos['logs']['update_time']
+            run += 1
+
+        except Exception as error:
+            while globals.direction != 'middle' :
+                show_message_break('Error:{}'.format(error), [100,100,100], .05)
+                get_joystick()
+            passed()
+            while globals.direction != 'middle' :
+                show_message_break("Would you like to reset config?", [100,100,100], .05)
+                get_joystick()
+            passed()
+            if yes_no([100,100,100]):
+                os.system('cp backup/logs.ini.backup apps/logs.ini')
+
+
+
+
+
+
+
+
 
 
     print(password_hash != '0')
@@ -167,9 +216,15 @@ while True:
     # Print clock waiting joystick up
     clock_process = Process(target = clock, args = (color1, color2,))
     clock_process.start()
-    get_joystick()
-    clock_process.terminate()
+    while globals.direction != 'left':
+        get_joystick()
     passed()
+    clock_process.terminate()
+
+    if brightness:
+        sense.low_light = True
+    else:
+        sense.low_light = False
 
     # Ask password if configured
     if password_hash != '0':
@@ -196,7 +251,7 @@ while True:
              if reset_mode == 1:
                  try:
                      os.system('cd ..')
-                     #os.system('rm **/*.ini !("apps_init.ini")') 
+                     #os.system('rm **/*.ini !("apps_init.ini")')
                  except:
                      pass
              elif reset_mode == 2:
@@ -244,30 +299,39 @@ while True:
 
         # Read the main menu configuration
 
-        config = ConfigParser()
-        config.read('apps/apps_init.ini')
+        apps = RawConfigParser()
+        apps.read('apps/apps_init.ini')
         print(config.options(config.sections()[0]), 12)
 
         # Main menu
         while globals.run:
 
-                #print(config.options(config.sections()[0]))
                 while globals.direction != 'down' and globals.direction != 'up' and globals.direction != 'left':
-                    config.read('apps/apps_init.ini')
-                    #print(globals.section)
-                    app_name = config['apps']['app{}'.format(globals.section+1)].split(" | ")[1]
-                    show_message_break("{}:{}".format(globals.section+1, app_name), color1, speed)
-                    get_joystick()
+                    #print(apps.sections())
                     #app_lib = config['apps']['app{}'.format(globals.section+1)].split(" | ")[0]
-                    #print(app_lib, "not")
-                    #print(globals.direction == 'middle')
-                    if globals.direction == 'middle':
-                        app_lib = config['apps']['app{}'.format(globals.section+1)].split(" | ")[0]
-                        passed()
-                        print(app_lib)
-                        exec('from apps.{} import *'.format(app_lib))
-                        main(color1, color2, speed)
-                config = ConfigParser()
-                config.read('apps/apps_init.ini')
-                passed(len(config.options(config.sections()[0]))-1)
+                    #try:
+                        app_name = apps['apps']['app{}'.format(globals.section+1)].split(" | ")[1]
+                        show_message_break("{}:{}".format(globals.section+1, app_name), color1, speed)
+                        get_joystick()
+                        if globals.direction == 'middle':
+                            app_lib = apps['apps']['app{}'.format(globals.section+1)].split(" | ")[0]
+                            passed()
+                            print(app_lib)
+                            exec('from apps.{} import *'.format(app_lib))
+                            main(color1, color2, speed)
+                        """
+                        except Exception as e:
+                            print(e)
+                            while (globals.direction != 'middle' ):
+                                show_message_break("Error in apps_init.ini!", color2, speed)
+                                get_joystick()
+                            passed()
+                            while (globals.direction != 'middle' ):
+                                show_message_break("Would you like to reset apps_init.ini?", color2, speed)
+                                get_joystick()
+                            passed()
+                            if yes_no(color2):
+                                os.system('cp apps_init.ini.backup apps/apps_init.ini')
+                        """
+                passed(len(apps.options(apps.sections()[0]))-1)
         passed()

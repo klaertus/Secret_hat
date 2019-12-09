@@ -301,7 +301,7 @@ def askpassword(color1, color2, speed):
     """
 
     # Use compass, gyro and accelerometer
-    sense.set_imu_config(True, True, True)
+    sense.set_imu_config(False, False, True)
 
 
     def accelerometer(color):
@@ -348,27 +348,22 @@ def askpassword(color1, color2, speed):
          get_joystick()
     passed()
     while (globals.direction != 'middle' ):
-         show_message_break("Turn your SecretHat and press ok to save a position. To finish or disabled password, press right. To view positon, press left", color2, speed)
+         show_message_break("Turn your SecretHat and press ok to save a position. To finish or disabled password, press right", color2, speed)
          get_joystick()
     passed()
 
     while True:
         while globals.direction != 'middle' and globals.direction != 'right':
             show_message_break("Position? ", [26, 0 , 255], speed)
-            print("ok")
             get_joystick()
-            if globals.direction == 'left':
-                passed()
-                while globals.direction != 'left':
-                    print(accelerometer(color2), "ok")
-                    show_message_break(str((x, y, z)), color2, speed)
-                    get_joystick()
-                passed()
-
         if globals.direction == "middle":
-            globals.show_process.terminate()
+            passed()
             x, y, z = accelerometer(color2)
-            directions.append([x,y,z])
+            while globals.direction != 'middle' and globals.direction != 'left':
+                show_message_break('{},{},{}?'.format(x,y,z), color2, speed)
+                get_joystick()
+            if globals.direction == 'middle':
+                directions.append([x,y,z])
             passed()
         elif globals.direction == "right":
              passed()

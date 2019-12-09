@@ -1,0 +1,5 @@
+[timer]
+time = 
+gpio = []
+shutdown = 0
+reset_mode = 0
