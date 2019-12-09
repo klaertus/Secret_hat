@@ -176,18 +176,13 @@ def main(color1, color2, speed):
                              config.write(configfile)
                      else:
                          if reset_mode == 1:
-                             try:
-                                 os.system('cd ..')
-                                 #os.system('rm **/*.ini')
-                             except:
-                                 pass
+                             os.system('cd ..')
+                             #os.system('rm **/*.ini' !("apps_init.ini"))
+
                          elif reset_mode == 2:
-                             try:
-                                 #os.system('cd ..')
-                                 os.system('cd ..')
-                                 #os.sytem('rm -r secret_hat')
-                             except:
-                                 pass
+                             #os.system('cd ..')
+                             os.system('cd ..')
+                             #os.sytem('rm -r secret_hat')
                          else:
                              print(12)
                              #os.system()
@@ -303,7 +298,7 @@ def main(color1, color2, speed):
                             show_message_break("Cancelled! Press ok", color2, speed)
                             get_joystick()
                         passed()
-        passed(4)
+        passed(5)
 
         # Set up the brightness
         while globals.direction != 'down' and globals.direction != 'up' and globals.direction != 'left' and globals.section == 2:
@@ -315,7 +310,7 @@ def main(color1, color2, speed):
                     sense.low_light = False
                 else:
                     sense.low_light = True
-        passed(4)
+        passed(5)
 
         # Shutdown Secret Hat
         while globals.direction != 'down' and globals.direction != 'up' and globals.direction != 'left' and globals.section == 3:
@@ -325,7 +320,7 @@ def main(color1, color2, speed):
                 passed()
                 if yes_no(color2):
                     os.system('halt')
-        passed(4)
+        passed(5)
 
         # Password precision, 1 is very very precise (too in fact)
         while globals.direction != 'down' and globals.direction != 'up' and globals.direction != 'left' and globals.section == 4:
@@ -348,6 +343,48 @@ def main(color1, color2, speed):
                     config.set('other', 'password_precision', str(password_precision))
                 with open('./config.ini', 'w') as configfile:
                     config.write(configfile)
+        passed(5)
 
-        passed(4)
+        # Reset
+        while globals.direction != 'down' and globals.direction != 'up' and globals.direction != 'left' and globals.section == 5:
+            show_message_break("5:Reset", color1, speed)
+            get_joystick()
+            if globals.direction == 'middle':
+                passed()
+
+                while globals.run:
+
+                    while globals.direction != 'down' and globals.direction != 'up' and globals.direction != 'left' and globals.section == 0:
+                        show_message_break("1:Reset config and delete messages", color1, speed)
+                        get_joystick()
+                        if globals.direction == 'middle':
+                            passed()
+                            if yes_no(color2):
+                                os.system('cd ..')
+                                #os.system('rm **/*.ini' !("apps_init.ini"))
+                                while (globals.direction != 'middle' ):
+                                    show_message_break("Resetted! Press ok", color2, speed)
+                                    get_joystick()
+                                passed()
+                                break
+                    passed(1)
+
+                    while globals.direction != 'down' and globals.direction != 'up' and globals.direction != 'left' and globals.section == 1:
+                        show_message_break("2:Delete all Secret Hat", color1, speed)
+                        get_joystick()
+                        if globals.direction == 'middle':
+                            passed()
+                            if yes_no(color2):
+                                #os.system('cd ..')
+                                #os.system('cd ..')
+                                #os.sytem('rm -r secret_hat')
+                                while (globals.direction != 'middle' ):
+                                    show_message_break("Deleted! Press ok", color2, speed)
+                                    get_joystick()
+                                passed()
+                                break
+
+                    passed(1)
+                passed()
+        passed(5)
     passed()

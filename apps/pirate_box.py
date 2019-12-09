@@ -1,5 +1,5 @@
 from sense_hat import SenseHat
-from .lib.init import show_message_break, passed, get_joystick, loading
+from .lib.init import show_message_break, passed, get_joystick, loading, yes_no
 from .lib import globals
 
 
@@ -44,11 +44,29 @@ def main(color1, color2, speed):
                             show_message_break("Pirate box started", color2, speed)
                             get_joystick()
                         passed()
+                        while globals.direction != 'middle' :
+                            show_message_break("Would you like to start AP?", color2, speed)
+                            get_joystick()
+                        passed()
+
+                        if yes_no(color2):
+                            if os.system('service hostapd start') == 0:
+                                globals.pirate_box_start_time = time.time()
+                                while globals.direction != 'middle' :
+                                    show_message_break("AP started", color2, speed)
+                                    get_joystick()
+                                passed()
+                            else:
+                                while globals.direction != 'middle':
+                                    show_message_break("Can't start hostapd service! Press OK", color2, speed)
+                                    get_joystick()
+                                passed()
                     else:
                         while globals.direction != 'middle':
                             show_message_break("Can't start apache2 service! Press OK", color2, speed)
                             get_joystick()
                         passed()
+
         passed(1)
 
         # Display informations (number of users connected and starting time)
@@ -80,7 +98,7 @@ def main(color1, color2, speed):
                         except:
                             pass
                     while globals.direction != 'middle':
-                        show_message_break("Users:{}  Started:{} min".format(round((time.time()-globals.pirate_box_start_time)/60, 2)), color2, speed)
+                        show_message_break("Started:{} min".format(round((time.time()-globals.pirate_box_start_time)/60, 2)), color2, speed)
                         get_joystick()
                     passed()
                 except:

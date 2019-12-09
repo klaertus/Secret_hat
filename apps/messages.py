@@ -251,7 +251,7 @@ def main(color1, color2, speed):
                                      passed()
                                      password = askpassword(color1, color2, speed)
                                      print(password)
-                                     lloading_process = Process(target = loading, args = (color1,))
+                                     loading_process = Process(target = loading, args = (color1,))
                                      loading_process.start()
                                      verify = verify_pass(password, password_hash, encrypt_random_a, encrypt_random_b)
                             passed()
