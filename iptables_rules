@@ -1,0 +1,38 @@
+# Drop all input
+iptables --policy INPUT DROP
+
+# Accept all output
+iptables --policy OUTPUT ACCEPT
+
+# Allow ssh input from eth0
+iptables -A INPUT -i eth0 -p tcp --dport 22 -m state --state NEW,ESTABLISHED,RELATED -j ACCEPT
+iptables -A OUTPUT -o eth0 -p tcp --dport 22 -m state --state ESTABLISHED,RELATED -j ACCEPT
+
+# Allow ssh input from wlan0
+iptables -A INPUT -i wlan0 -p tcp --dport 22 -m state --state NEW,ESTABLISHED,RELATED -j ACCEPT
+iptables -A OUTPUT -o wlan0 -p tcp --dport 22 -m state --state ESTABLISHED,RELATED -j ACCEPT
+
+# Allow webserver input from eth0
+iptables -A INPUT -i eth0 -p tcp -m multiport --dports 80,443 -m state --state NEW,ESTABLISHED,RELATED -j ACCEPT
+iptables -A OUTPUT -o eth0 -p tcp -m multiport --dports 80,443 -m state --state ESTABLISHED,RELATED -j ACCEPT
+
+# Allow webserver input from wlan0
+iptables -A INPUT -i wlan0 -p tcp -m multiport --dports 80,443 -m state --state NEW,ESTABLISHED,RELATED -j ACCEPT
+iptables -A OUTPUT -o wlan0 -p tcp -m multiport --dports 80,443 -m state --state ESTABLISHED,RELATED -j ACCEPT
+
+# Allow ping request input from eth0
+iptables -A INPUT -i eth0 -p icmp -m state --state NEW,ESTABLISHED,RELATED -j ACCEPT
+iptables -A OUTPUT -i eth0 -p icmp -m state --state ESTABLISHED,RELATED -j ACCEPT
+
+# Allow ping request input from wlan0
+iptables -A INPUT -i wlan0 -p icmp -m state --state NEW,ESTABLISHED,RELATED -j ACCEPT
+iptables -A OUTPUT -i wlan0 -p icmp -m state --state ESTABLISHED,RELATED -j ACCEPT
+
+# Allow forward eth0/wlan0
+iptables --policy FORWARD ACCEPT
+
+# Deny forward eth0/wlan0
+iptables --policy FORWARD DROP
+
+# Flush all
+iptables -F

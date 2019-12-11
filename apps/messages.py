@@ -2,6 +2,7 @@ from sense_hat import SenseHat
 from lib.init import *
 from lib import globals
 from lib.encrypt import *
+from lib import crypto
 
 from configparser import RawConfigParser
 from multiprocessing import Process
@@ -15,6 +16,7 @@ sense = SenseHat()
 messages = RawConfigParser()
 
 
+
 # Read configuration, create it if doesn't exist
 try:
     messages.read('apps/messages.ini')
@@ -22,6 +24,7 @@ except:
     file = open('apps/messages.ini', 'w+')
     file.close()
     messages.read('apps/messages.ini')
+
 
 
 
@@ -121,7 +124,7 @@ def main(color1, color2, speed):
 
                     # Save the configuration
                     if clear_password == None:
-                        messages.set('message{}'.format(slot_number), 'password_hash', '0')
+                        messages.set('message{}'.format(slot_number), 'password_hash', None)
                         messages.set('message{}'.format(slot_number), 'message', message)
                     else:
                         loading_process = Process(target = loading, args = (color1,))
@@ -158,6 +161,7 @@ def main(color1, color2, speed):
             get_joystick()
             if globals.direction == 'middle' :
                 passed()
+
                 # Check if there are messages in messages.ini
                 try:
                         msg_number = int(messages.sections()[globals.section].replace('message', ''))
@@ -170,18 +174,18 @@ def main(color1, color2, speed):
                         globals.run = False
 
                 # Submenu of the messages
-                while globals.run:
+                while globals.run and len(messages.sections()) is not 0:
 
-                    while (globals.direction != 'down' and globals.direction != 'up' and globals.direction != 'left'):
+                    while globals.direction != 'down' and globals.direction != 'up' and globals.direction != 'left' and len(messages.sections()) is not 0:
                         msg_number = int(messages.sections()[globals.section].replace('message', ''))
                         show_message_break("{}:Message".format(msg_number), color2, speed)              # Display the slot number
                         get_joystick()
                         if globals.direction == 'middle' :
                             passed()
                             verify = False
-                            try:
+                            try:            # Check configuration of the message only, except if error
                                 password_hash = messages['message{}'.format(msg_number)]['password_hash']
-                                if password_hash != '0':                # If password exist
+                                if password_hash is not None:                # If password exist
                                     # Check configuration
                                     encrypt_random_a = messages['message{}'.format(msg_number)]['encrypt_random_a']
                                     encrypt_random_b = messages['message{}'.format(msg_number)]['encrypt_random_b']
@@ -189,7 +193,6 @@ def main(color1, color2, speed):
                                     tries = int(messages['message{}'.format(msg_number)]['tries'])
                                     remaining_tries = int(messages['message{}'.format(msg_number)]['remaining_tries'])
                                     # Ask the password
-                                    run = False
                                     password = askpassword(color1, color2, speed)
                                     loading_process = Process(target = loading, args = (color1,))
                                     loading_process.start()
@@ -316,7 +319,6 @@ def main(color1, color2, speed):
                                         get_joystick()
                                     passed()
                                 passed()
-
 
                     passed(len(messages.sections())-1)
 

@@ -4,10 +4,10 @@ from sense_hat import SenseHat
 from multiprocessing import Process
 from time import sleep, time
 from math import floor
-from configparser import ConfigParser
+from configparser import RawConfigParser
 
 sense = SenseHat()
-config = ConfigParser()
+config = RawConfigParser(allow_no_value=True)
 
 def get_joystick():
 
@@ -44,7 +44,7 @@ def is_alive(process):
 
 
 
-def passed(max_section = -1):
+def passed(max_section = -2):
 
     """Stop the message display on the Sense Hat,
        Get joystick direction to navigate between sections or menu,
@@ -63,7 +63,7 @@ def passed(max_section = -1):
         globals.show_process.terminate()
 
     sense.clear()
-    if max_section != -1:
+    if max_section != -2:
         if globals.direction == 'up':
             globals.section -= 1
             if globals.section < 0:
@@ -324,7 +324,7 @@ def askpassword(color1, color2, speed):
 
         print(orientation)
         # Floor to not be too precise, var precise may be modified in config.ini
-        config.read('./config.ini')
+        config.read('config.ini')
         try:
             precise = int(config['other']['password_precision'])
         except:

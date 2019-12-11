@@ -4,7 +4,7 @@ from lib import globals
 
 
 from datetime import datetime
-from time import sleep
+from time import sleep, time
 from multiprocessing import Process
 from configparser import RawConfigParser
 import netifaces as ni
@@ -16,8 +16,8 @@ This application allows to save several infos in a file, with variable update ti
 """
 
 sense = SenseHat()
-track_infos = RawConfigParser()
-
+track_infos = RawConfigParser(allow_no_value=True)
+track_infos.read('apps/track_infos.ini')
 
 if not os.path.isfile('./saved_logs.txt'):
     file = open('saved_logs.txt',"w+")
@@ -28,7 +28,7 @@ if not os.path.isfile('./saved_logs.txt'):
 def log_track(update_sec):
         log_file_open = open('saved_logs.txt',"a")
         x=0
-        globals.log_track_start_time = time.time()
+
         while True:
             # Check ip
             try:
@@ -84,6 +84,7 @@ def main(color1, color2, speed):
                         update_time = int(track_infos['logs']['update_time'])
                         globals.logs_process = Process(target=log_track, args=(update_time,))
                         globals.logs_process.start()
+                        globals.log_track_start_time = time()
                         while globals.direction != 'middle':
                             show_message_break('Started! Press ok', color2, speed)
                             get_joystick()
@@ -100,7 +101,7 @@ def main(color1, color2, speed):
             get_joystick()
             if globals.direction == 'middle' :
                 passed()
-                if globals.logs_process.is_alive():
+                if is_alive(globals.logs_process):
                     while globals.direction != 'middle':
                         show_message_break('Track is started', color2, speed)
                         get_joystick()
@@ -114,7 +115,7 @@ def main(color1, color2, speed):
                     if update_time == 0:
                         update_time = 1
                     track_infos.set('logs', 'update_time', str(update_time))
-                    with open('apps/logs.ini', 'w') as configfile:
+                    with open('apps/track_infos.ini', 'w') as configfile:
                         track_infos.write(configfile)
                     while globals.direction != 'middle':
                         show_message_break("Saved! Press ok", color2, speed)
@@ -130,17 +131,17 @@ def main(color1, color2, speed):
                 if is_alive(globals.logs_process):
                     update_time = int(track_infos['logs']['update_time'])
                     while globals.direction != 'middle':
-                        show_message_break("Started:{} min".format(users,round((time.time()-globals.log_track_start_time)/60, 2)), color2, speed)
+                        show_message_break("Started:{} min".format(round((time()-globals.log_track_start_time)/60, 2)), color2, speed)
                         get_joystick()
                     passed()
                     while globals.direction != 'middle':
-                        show_message_break('Update timer:{}'.format(int(track_infos['logs']['update_time'])), color2, speed)
+                        show_message_break('Update timer:{}'.format(update_time), color2, speed)
                         get_joystick()
                     passed()
-            else:
-                while globals.direction != 'middle':
-                    show_message_break('Track not started! Press ok', color2, speed)
-                    get_joystick()
-                passed()
+                else:
+                    while globals.direction != 'middle':
+                        show_message_break('Track not started! Press ok', color2, speed)
+                        get_joystick()
+                    passed()
         passed(2)
     passed()

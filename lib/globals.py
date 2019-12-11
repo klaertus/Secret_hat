@@ -9,3 +9,4 @@ logs_process = None
 section = 1
 run = True
 timer_process = None
+password = None

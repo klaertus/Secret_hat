@@ -15,7 +15,6 @@ Display informations about the raspberry (system temperature, ip, date and time)
 """
 
 sense = SenseHat()
-    # Sytem temp isn't finished
 wireless = Wireless()
 yellow = [0,0,255]
 
@@ -62,7 +61,7 @@ def main(color1, color2, speed):
                             get_joystick()
                         passed()
                 passed()
-        passed(7)
+        passed(6)
 
         # Current Wifi
         while globals.direction != 'down' and globals.direction != 'up' and globals.direction != 'left' and globals.section == 1:
@@ -74,7 +73,7 @@ def main(color1, color2, speed):
                     show_message_break(str(wireless.current()), color2, speed)
                     get_joystick()
                 passed()
-        passed(7)
+        passed(6)
 
         # System date and time
         while globals.direction != 'down' and globals.direction != 'up' and globals.direction != 'left' and globals.section == 2:
@@ -86,22 +85,10 @@ def main(color1, color2, speed):
                     show_message_break(str(datetime.datetime.now()), color2, speed)
                     get_joystick()
                 passed()
-        passed(7)
-
-        # System temperature
-        while globals.direction != 'down' and globals.direction != 'up' and globals.direction != 'left' and globals.section == 3:
-            show_message_break("4:System temperature", color1, speed)
-            get_joystick()
-            if globals.direction == 'middle':
-                passed()
-                while globals.direction != 'middle':
-                    show_message_break(str(datetime.datetime.now()), color2, speed)
-                    get_joystick()
-                passed()
-        passed(7)
+        passed(6)
 
         # Compass
-        while globals.direction != 'down' and globals.direction != 'up' and globals.direction != 'left' and globals.section == 4:
+        while globals.direction != 'down' and globals.direction != 'up' and globals.direction != 'left' and globals.section == 3:
             show_message_break("5:Compass", color1, speed)
             get_joystick()
             if globals.direction == 'middle':
@@ -117,17 +104,17 @@ def main(color1, color2, speed):
                     show_message_break('Press ok!', color2, speed)
                     get_joystick()
                 passed()
+                compass_process = Process(target = compass)
+                compass_process.start()
                 while globals.direction != 'middle':
-                    compass_process = Process(target = compass)
-                    compass_process.start()
                     get_joystick()
                 compass_process.terminate()
 
                 passed()
-        passed(7)
+        passed(6)
 
         # Sensor temperature
-        while globals.direction != 'down' and globals.direction != 'up' and globals.direction != 'left' and globals.section == 5:
+        while globals.direction != 'down' and globals.direction != 'up' and globals.direction != 'left' and globals.section == 4:
             show_message_break("6:Sensor temperature", color1, speed)
             get_joystick()
             if globals.direction == 'left':
@@ -140,10 +127,10 @@ def main(color1, color2, speed):
                         show_message_break("{} degrees C".format(round(sense.get_temperature(), 1)), color2, speed)
                         get_joystick()
                 passed()
-        passed(7)
+        passed(6)
 
         # Pressure
-        while globals.direction != 'down' and globals.direction != 'up' and globals.direction != 'left' and globals.section == 6:
+        while globals.direction != 'down' and globals.direction != 'up' and globals.direction != 'left' and globals.section == 5:
             show_message_break("7:Pressure", color1, speed)
             get_joystick()
             if globals.direction == 'middle':
@@ -152,10 +139,10 @@ def main(color1, color2, speed):
                     show_message_break("{} millibars".format(round(sense.get_pressure(), 3)), color2, speed)
                     get_joystick()
                 passed()
-        passed(7)
+        passed(6)
 
         # Humidity
-        while globals.direction != 'down' and globals.direction != 'up' and globals.direction != 'left' and globals.section == 7:
+        while globals.direction != 'down' and globals.direction != 'up' and globals.direction != 'left' and globals.section == 6:
             show_message_break("8:Humidity", color1, speed)
             get_joystick()
             if globals.direction == 'middle':
@@ -164,7 +151,7 @@ def main(color1, color2, speed):
                     show_message_break("{} %".format(round(sense.get_humidity(), 3)), color2, speed)
                     get_joystick()
                 passed()
-        passed(7)
+        passed(6)
     passed()
 
 

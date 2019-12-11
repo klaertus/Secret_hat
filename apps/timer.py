@@ -4,7 +4,7 @@ from lib import globals
 
 
 from RPi import GPIO
-from configparser import ConfigParser
+from configparser import RawConfigParser
 from time import sleep
 from multiprocessing import Process, Value
 import os
@@ -16,8 +16,8 @@ GPIO, shutdown and/or reset timer
 
 
 sense = SenseHat()
-timer = ConfigParser(allow_no_value=True)
-
+timer_configuration = RawConfigParser(allow_no_value=True)
+timer_configuration.read('apps/timer.ini')
 
 
 GPIO.setwarnings(False)             # Initialize GPIOs
@@ -81,11 +81,12 @@ def main(color1, color2, speed):
     passed()
     while globals.run:
 
-        while globals.direction != 'down' and globals.direction != 'left' and globals.section == 0:
+        while globals.direction != 'down' and globals.direction != 'up' and globals.direction != 'left' and globals.section == 0:
             show_message_break("1:Start/Stop", color1, speed)
             get_joystick()
             if globals.direction == 'middle' :
                 passed()
+                print(timer_configuration['timer']['time'] == None)
                 if is_alive(globals.timer_process):
                     globals.timer_process.terminate()
                     while globals.direction != 'middle':
@@ -103,18 +104,18 @@ def main(color1, color2, speed):
                             get_joystick()
                         passed()
 
-                elif timer['timer']['time']) == None:
+                elif timer_configuration['timer']['time'] == None:
                     while globals.direction != 'middle':
                         show_message_break('Timer not configured! Press ok', color2, speed)
                         get_joystick()
                     passed()
 
                 else:
-                    print(float(timer['timer']['time']), type(float(timer['timer']['time'])))
-                    time_left = Value('d',float(timer['timer']['time']))
-                    list_gpio = ast.literal_eval(timer['timer']['gpio'])
-                    shutdown = bool(timer['timer']['shutdown'])
-                    reset_mode = int(timer['timer']['reset_mode'])
+                    print(timer_configuration['timer']['time'], 12)
+                    time_left = Value('d',float(timer_configuration['timer']['time']))
+                    list_gpio = ast.literal_eval(timer_configuration['timer']['gpio'])
+                    shutdown = bool(timer_configuration['timer']['shutdown'])
+                    reset_mode = int(timer_configuration['timer']['reset_mode'])
                     globals.timer_process = Process(target = timer, args=(time_left, list_gpio, shutdown, reset_mode,))
                     globals.timer_process.start()
                     while globals.direction != 'middle':
@@ -124,7 +125,7 @@ def main(color1, color2, speed):
         passed(2)
 
 
-        while globals.direction != 'down' and globals.direction != 'left' and globals.section == 1:
+        while globals.direction != 'down' and globals.direction != 'up' and globals.direction != 'left' and globals.section == 1:
             show_message_break("2:Configuration", color1, speed)
             get_joystick()
             if globals.direction == 'middle' :
@@ -140,7 +141,7 @@ def main(color1, color2, speed):
                         get_joystick()
                     passed()
                     second = int(askmessage(color2, speed).replace('[', '').replace(']', '').replace(',', '').replace(' ', ''))
-                    if second = 0:
+                    if second == 0:
                         second = 1
                     while globals.direction != 'middle':
                         show_message_break('GPIO?', color2, speed)
@@ -240,12 +241,12 @@ def main(color1, color2, speed):
                     passed()
 
                     if yes_no(color2):
-                        timer.set('timer', 'time', str(second))
-                        timer.set('timer', 'gpio', str(list_gpio))
-                        timer.set('timer', 'shutdown', str(shutdown))
-                        timer.set('timer', 'reset_mode', str(reset_mode))
+                        timer_configuration.set('timer', 'time', str(second))
+                        timer_configuration.set('timer', 'gpio', str(list_gpio))
+                        timer_configuration.set('timer', 'shutdown', str(shutdown))
+                        timer_configuration.set('timer', 'reset_mode', str(reset_mode))
                         with open('apps/timer.ini', 'w') as configfile:
-                            timer.write(configfile)
+                            timer_configuration.write(configfile)
                         while (globals.direction != 'middle' ):
                             show_message_break("Saved! Press ok", color2, speed)
                             get_joystick()
@@ -259,16 +260,16 @@ def main(color1, color2, speed):
         passed(2)
 
 
-        while globals.direction != 'down' and globals.direction != 'left' and globals.section == 2:
+        while globals.direction != 'down' and globals.direction != 'up' and globals.direction != 'left' and globals.section == 2:
             show_message_break("3:Infos", color1, speed)
             get_joystick()
 
             if globals.direction == 'middle' :
                 passed()
                 if is_alive(globals.timer_process):
-                    list_gpio = timer['timer']['gpio']
-                    shutdown = bool(timer['timer']['shutdown'])
-                    reset_mode = int(timer['timer']['reset_mode'])
+                    list_gpio = timer_configuration['timer']['gpio']
+                    shutdown = bool(timer_configuration['timer']['shutdown'])
+                    reset_mode = int(timer_configuration['timer']['reset_mode'])
                     while globals.direction != 'middle' :
                         show_message_break('{} : time left'.format(time_left.value), color2, speed)
                         get_joystick()
@@ -283,7 +284,7 @@ def main(color1, color2, speed):
                          get_joystick()
                     passed()
                     if reset_mode == 0:
-                        reset_mode = none
+                        reset_mode = 'none'
                     while globals.direction != 'middle' :
                          show_message_break('Reset mode:{}'.format(reset_mode), color2, speed)
                          get_joystick()
@@ -294,9 +295,6 @@ def main(color1, color2, speed):
                         show_message_break('Timer not started! Press ok', color2, speed)
                         get_joystick()
                     passed()
-
-
-
         passed(2)
     passed()
 

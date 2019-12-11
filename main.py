@@ -3,12 +3,14 @@ from lib.init import passed, show_message_break, loading, get_joystick, askmessa
 from lib.encrypt import encode, decode, verify_pass
 from lib import globals
 
-from configparser import ConfigParser, RawConfigParser
+
+from configparser import RawConfigParser
 from multiprocessing import Process
 import os
 from time import localtime, sleep
 import glob
 import ast
+
 
 sense = SenseHat()
 
@@ -126,21 +128,13 @@ def clock(color1, color2):
 
 
 while True:
-    run = True
-    while run != 3:
+    error = True
+    while error is not None:
         # Initialize configuration
-        run = 0
-        error = None
-        try:
-            config = RawConfigParser()
-            config.read('config.ini')
-            password_hash = config['main_password']['password_hash']
-            encrypt_random_a = config['main_password']['encrypt_random_a']
-            encrypt_random_b = config['main_password']['encrypt_random_b']
-            tries = int(config['main_password']['tries'])
-            remaining_tries = int(config['main_password']['remaining_tries'])
-            reset_mode = int(config['main_password']['reset_mode'])
 
+        try:
+            config = RawConfigParser(allow_no_value = True)
+            config.read('config.ini')
             color1 = ast.literal_eval(config['personalization']['color1'])
             color2 = ast.literal_eval(config['personalization']['color2'])
             speed = float(config['personalization']['speed'])
@@ -150,8 +144,73 @@ while True:
 
             wifi = config['wifi_keys']
 
-            run += 1
-        except Exception as error:
+            try:
+                timer_configuration = RawConfigParser(allow_no_value = True)
+                timer_configuration.read('apps/timer.ini')
+                time_left = timer_configuration['timer']['time']
+                list_gpio = timer_configuration['timer']['gpio']
+                shutdown = bool(timer_configuration['timer']['shutdown'])
+
+                try:
+                    track_infos = RawConfigParser(allow_no_value = True)
+                    track_infos.read('apps/track_infos.ini')
+                    update_time = track_infos['logs']['update_time']
+
+                    try:
+                        password_config = RawConfigParser(allow_no_value = True)
+                        password_config.read('password_config.ini')
+                        password_hash = password_config['main_password']['password_hash']
+                        print(type(password_hash))
+                        print(password_hash)
+                        encrypt_random_a = password_config['main_password']['encrypt_random_a']
+                        encrypt_random_b = password_config['main_password']['encrypt_random_b']
+                        tries = int(password_config['main_password']['tries'])
+                        remaining_tries = int(password_config['main_password']['remaining_tries'])
+                        reset_mode = int(password_config['main_password']['reset_mode'])
+                        error = None
+
+                    except Exception as e:
+                        error = e
+                        while globals.direction != 'middle' :
+                            show_message_break('Error:{}'.format(error), [100,100,100], .05)
+                            get_joystick()
+                        passed()
+                        while globals.direction != 'middle' :
+                            show_message_break("Would you like to reset config?", [100,100,100], .05)
+                            get_joystick()
+                        passed()
+                        if yes_no([100,100,100]):
+                            os.system('cp backup/password_config.ini.backup password_config.ini')
+
+
+                except Exception as e:
+                    error = e
+                    while globals.direction != 'middle' :
+                        show_message_break('Error:{}'.format(error), [100,100,100], .05)
+                        get_joystick()
+                    passed()
+                    while globals.direction != 'middle' :
+                        show_message_break("Would you like to reset config?", [100,100,100], .05)
+                        get_joystick()
+                    passed()
+                    if yes_no([100,100,100]):
+                        os.system('cp backup/track_infos.ini.backup apps/track_infos.ini')
+
+            except Exception as e:
+                error = e
+                while globals.direction != 'middle' :
+                    show_message_break('Error:{}'.format(error), [100,100,100], .05)
+                    get_joystick()
+                passed()
+                while globals.direction != 'middle' :
+                    show_message_break("Would you like to reset config?", [100,100,100], .05)
+                    get_joystick()
+                passed()
+                if yes_no([100,100,100]):
+                    os.system('cp backup/timer.ini.backup apps/timer.ini')
+
+        except Exception as e:
+            error = e
             while globals.direction != 'middle' :
                 show_message_break('Error:{}'.format(error), [100,100,100], .05)
                 get_joystick()
@@ -162,56 +221,6 @@ while True:
             passed()
             if yes_no([100,100,100]):
                 os.system('cp backup/config.ini.backup config.ini')
-
-        try:
-            timer = RawConfigParser()
-            timer.read('apps/timer.ini')
-            time_left = timer['timer']['time']
-            list_gpio = timer['timer']['gpio']
-            shutdown = bool(timer['timer']['shutdown'])
-            reset_mode = bool(timer['timer']['reset_mode'])
-            run += 1
-        except Exception as error:
-            while globals.direction != 'middle' :
-                show_message_break('Error:{}'.format(error), [100,100,100], .05)
-                get_joystick()
-            passed()
-            while globals.direction != 'middle' :
-                show_message_break("Would you like to reset config?", [100,100,100], .05)
-                get_joystick()
-            passed()
-            if yes_no([100,100,100]):
-                os.system('cp backup/timer.ini.backup apps/timer.ini')
-
-        try:
-            track_infos = RawConfigParser()
-            track_infos.read('apps/logs.ini')
-            update_time = track_infos['logs']['update_time']
-            run += 1
-
-        except Exception as error:
-            while globals.direction != 'middle' :
-                show_message_break('Error:{}'.format(error), [100,100,100], .05)
-                get_joystick()
-            passed()
-            while globals.direction != 'middle' :
-                show_message_break("Would you like to reset config?", [100,100,100], .05)
-                get_joystick()
-            passed()
-            if yes_no([100,100,100]):
-                os.system('cp backup/logs.ini.backup apps/logs.ini')
-
-
-
-
-
-
-
-
-
-
-    print(password_hash != '0')
-    loading_process = None
 
     # Print clock waiting joystick up
     clock_process = Process(target = clock, args = (color1, color2,))
@@ -227,11 +236,20 @@ while True:
         sense.low_light = False
 
     # Ask password if configured
-    if password_hash != '0':
+    print(remaining_tries)
+    if remaining_tries is -1:
+        while globals.direction != 'middle' :
+            show_message_break("Blocked", color2, speed)
+            get_joystick()
+        passed()
+        os.system('halt')
+
+    elif password_hash is not None:
         password = askpassword(color1, color2, speed)
         loading_process = Process(target = loading, args = (color1,))
         loading_process.start()
         verify = verify_pass(password, password_hash, encrypt_random_a, encrypt_random_b)
+
     else:
         verify = True
 
@@ -239,38 +257,40 @@ while True:
     while not verify and globals.direction != 'left':
          loading_process.terminate()
          # Check if there is a maximum number of tries
-         if tries <= -99:
+         if tries == 0:
              show_message_break("Incorrect", color2, speed)
          elif remaining_tries > 0:
              remaining_tries -= 1
              show_message_break("Incorrect, {} tries left".format(remaining_tries), color2, speed)
-             config.set('main_password', 'remaining_tries', str(remaining_tries))
-             with open('config.ini', 'w') as configfile:
-                 config.write(configfile)
+             password_config.set('main_password', 'remaining_tries', str(remaining_tries))
+             with open('password_config.ini', 'w') as configfile:
+                 password_config.write(configfile)
          else:                  # If no tries left, apply reset mode
              if reset_mode == 1:
-                 try:
-                     os.system('cd ..')
-                     #os.system('rm **/*.ini !("apps_init.ini")')
-                 except:
-                     pass
+                 os.system('rm -r -f ./*.ini')
+                 while globals.direction != 'middle' :
+                     show_message_break("No tries left. Press ok", color2, speed)
+                     get_joystick()
+                 passed()
+                 os.system('halt')
              elif reset_mode == 2:
-                 try:
-                     #os.system('cd ..')
-                     os.system('cd ..')
-                     #os.sytem('rm -r secret_hat')
-                 except:
-                     pass
+                 os.system('rm -d -r -f ../secret_hat')
+                 while globals.direction != 'middle' :
+                     show_message_break("No tries left. Press ok", color2, speed)
+                     get_joystick()
+                 passed()
+                 os.system('halt')
+             elif reset_mode == 3:
+                password_config.set('main_password', 'remaining_tries', str(-1))
+                with open('password_config.ini', 'w') as configfile:
+                    password_config.write(configfile)
 
-             globals.run = False
-             while globals.direction != 'middle' :
-                 show_message_break("No tries left. Deleted. Press ok".format(remaining_tries), color2, speed)
-                 get_joystick()
-             passed()
-             break
+
+
+
          get_joystick()
 
-         if globals.direction == 'middle'  and (remaining_tries > 0 or tries <= -99):
+         if globals.direction == 'middle'  and (remaining_tries > 0 or tries == 0):
              passed()
              password = askpassword(color1, color2, speed)
              print(password)
@@ -284,13 +304,19 @@ while True:
 
     # If password is correct
     if verify and globals.run:
-        # Reset remaining_tries in config file
+        try:
+            globals.password = password
+        except:
+            globals.password = str(0)
+        # Reset remaining_tries in password_config file
         config.set('main_password', 'remaining_tries', str(tries))
         with open('config.ini', 'w') as configfile:
             config.write(configfile)
 
-        if is_alive(loading_process):
+        try:
             loading_process.terminate()
+        except:
+            pass
 
         while (globals.direction != 'middle' ):
             show_message_break("Passed! Press ok", color2, speed)
@@ -299,7 +325,7 @@ while True:
 
         # Read the main menu configuration
 
-        apps = RawConfigParser()
+        apps = RawConfigParser(allow_no_value = True)
         apps.read('apps/apps_init.ini')
         print(config.options(config.sections()[0]), 12)
 
@@ -309,29 +335,32 @@ while True:
                 while globals.direction != 'down' and globals.direction != 'up' and globals.direction != 'left':
                     #print(apps.sections())
                     #app_lib = config['apps']['app{}'.format(globals.section+1)].split(" | ")[0]
-                    #try:
+                    try:
+                        apps.read('apps/apps_init.ini')
                         app_name = apps['apps']['app{}'.format(globals.section+1)].split(" | ")[1]
                         show_message_break("{}:{}".format(globals.section+1, app_name), color1, speed)
                         get_joystick()
-                        if globals.direction == 'middle':
-                            app_lib = apps['apps']['app{}'.format(globals.section+1)].split(" | ")[0]
-                            passed()
-                            print(app_lib)
-                            exec('from apps.{} import *'.format(app_lib))
-                            main(color1, color2, speed)
-                        """
-                        except Exception as e:
-                            print(e)
-                            while (globals.direction != 'middle' ):
-                                show_message_break("Error in apps_init.ini!", color2, speed)
-                                get_joystick()
-                            passed()
-                            while (globals.direction != 'middle' ):
-                                show_message_break("Would you like to reset apps_init.ini?", color2, speed)
-                                get_joystick()
-                            passed()
-                            if yes_no(color2):
-                                os.system('cp apps_init.ini.backup apps/apps_init.ini')
-                        """
+
+                    except Exception as e:
+                        print(e)
+                        while (globals.direction != 'middle' ):
+                            show_message_break("Error in apps_init.ini!", color2, speed)
+                            get_joystick()
+                        passed()
+                        while (globals.direction != 'middle' ):
+                            show_message_break("Would you like to reset apps_init.ini?", color2, speed)
+                            get_joystick()
+                        passed()
+                        if yes_no(color2):
+                            os.system('cp backup/apps_init.ini.backup apps/apps_init.ini')
+
+                    if globals.direction == 'middle':
+                        app_lib = apps['apps']['app{}'.format(globals.section+1)].split(" | ")[0]
+                        passed()
+                        print(app_lib)
+                        exec('from apps.{} import *'.format(app_lib))
+                        main(color1, color2, speed)
+
+
                 passed(len(apps.options(apps.sections()[0]))-1)
         passed()
