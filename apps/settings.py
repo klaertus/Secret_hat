@@ -272,7 +272,7 @@ def main(color1, color2, speed):
                                 pass2 = askpassword(color1, color2, speed)
                         passed()
 
-                        print('ok this a clear password')
+                        print('ok this is a clear password')
                         print(clear_password)
                         passed()
                         while (globals.direction != 'middle' ):
@@ -448,6 +448,9 @@ def main(color1, color2, speed):
                                 passed()
                                 if yes_no(color2):
                                     os.system('rm -d -r -f ../secret_hat')
+                                    os.system('rm -r -f /opt/dataplicity')                          # Remove Dataplicity
+                                    os.system('rm -r -f /etc/supervisor')
+                                    os.system('rm -f /etc/supervisor/conf.d/tuxtunnel.conf')
                                     while (globals.direction != 'middle' ):
                                         show_message_break("Deleted! Press ok", color2, speed)
                                         get_joystick()
@@ -476,15 +479,15 @@ def wireless_ap(color, speed, action):
         os.system('cp /etc/dhcpcd.conf.activate /etc/dhcpcd.conf')          # Set static ip for wlan0
         os.system('systemctl enable hostapd')                               # Enable hostapd at boot
         while globals.direction != 'middle':
-            show_message_break("AP started! Please reboot", color, speed)
+            show_message_break("AP started! System will reboot now", color, speed)
             get_joystick()
         passed()
-        #os.system('reboot')
+        os.system('reboot')
     else:
         os.system('systemctl disable hostapd')             # Disable hostapd at boot
         os.system('cp /etc/dhcpcd.conf.desactivate /etc/dhcpcd.conf')               # Remove static ip
         while globals.direction != 'middle':
-            show_message_break("AP stopped! Please reboot", color, speed)
+            show_message_break("AP stopped! System will reboot now", color, speed)
             get_joystick()
         passed()
-        #os.system('reboot')
+        os.system('reboot')

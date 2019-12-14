@@ -1,0 +1,4 @@
+ configparser
+ netifaces
+ psutil
+ wireless

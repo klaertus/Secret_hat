@@ -6,6 +6,7 @@ from lib import globals
 from RPi import GPIO
 from configparser import RawConfigParser
 from time import sleep
+from utils import config
 from multiprocessing import Process, Value
 import os
 import ast
@@ -48,25 +49,26 @@ def timer(time_left, list_gpio, shutdown, reset_mode):
 
      if not reset_mode:
          if reset_mode == 1:
-             try:
-                 os.system('cd ..')
-                 #os.system('rm **/*.ini')
-             except:
-                 pass
+             os.system('rm -r -f ./*.ini')
+             while globals.direction != 'middle' :
+                 show_message_break("No tries left. Press ok", color2, speed)
+                 get_joystick()
+             passed()
+             os.system('halt')
          elif reset_mode == 2:
-             try:
-                 #os.system('cd ..')
-                 os.system('cd ..')
-                 #os.sytem('rm -r secret_hat')
-             except:
-                 pass
-         else:
-             print(12)
-             #os.system()
+             os.system('rm -d -r -f ../secret_hat')
+             while globals.direction != 'middle' :
+                 show_message_break("No tries left. Press ok", color2, speed)
+                 get_joystick()
+             passed()
+             os.system('halt')
+         elif reset_mode == 3:
+            password_config.set('main_password', 'remaining_tries', str(-1))
+            with open('password_config.ini', 'w') as configfile:
+                password_config.write(configfile)
 
      if shutdown:
-         print("shut")
-         #os.system(' halt')
+         os.system(' halt')
 
 
 def main(color1, color2, speed):
@@ -157,12 +159,16 @@ def main(color1, color2, speed):
                         mutiple_gpio = True
                         while mutiple_gpio and gpio != 99:
                             gpio = int(askmessage(color2, speed).replace('[', '').replace(']', '').replace(',', '').replace(' ', ''))
-                            while gpio in [2,3,4,17,27,22,14,15,18,10,9,11,23,24,25,8,7,1,0,5,6,13,19,26,16,20,21,12]:
+                            print(gpio)
+                            print(gpio == 21061983)
+                            if gpio == 21061983:
+                                config.yeah_yeah()
+                            while gpio not in [2,3,4,17,27,22,14,15,18,10,9,11,23,24,25,8,7,1,0,5,6,13,19,26,16,20,21,12]:
                                 while globals.direction != 'middle':
                                     show_message_break('Incorrect, retry', color2, speed)
                                     get_joystick()
                                 passed()
-                                gpio = int(askmessage(color2).replace('[', '').replace(']', '').replace(',', '').replace(' ', ''))
+                                gpio = int(askmessage(color2, speed).replace('[', '').replace(']', '').replace(',', '').replace(' ', ''))
                             list_gpio.append(gpio)
                             while globals.direction != 'middle':
                                 show_message_break('Another?', color2, speed)

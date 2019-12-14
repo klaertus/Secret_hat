@@ -3,7 +3,7 @@ from sense_hat import SenseHat
 from lib.init import *
 from lib import globals
 
-import netifaces as ni
+import netifaces
 import time
 import datetime
 from multiprocessing import Process
@@ -40,15 +40,15 @@ def main(color1, color2, speed):
                 while globals.direction != 'middle':
                     # Get raspberry's IP address
                     try:
-                        ni.ifaddresses('eth0')
+                        netifaces.ifaddresses('eth0')
                         iface_eth = 'eth0'
-                        ip_eth = ni.ifaddresses(iface_eth)[ni.AF_INET][0]['addr']
+                        ip_eth = netifaces.ifaddresses(iface_eth)[netifaces.AF_INET][0]['addr']
                     except:
                         ip_eth = None
                     try:
-                        ni.ifaddresses('wlan0')
+                        netifaces.ifaddresses('wlan0')
                         iface_wlan = 'wlan0'
-                        ip_wlan = ni.ifaddresses(iface_wlan)[ni.AF_INET][0]['addr']
+                        ip_wlan = netifaces.ifaddresses(iface_wlan)[netifaces.AF_INET][0]['addr']
                     except:
                         ip_wlan = None
 
@@ -89,7 +89,7 @@ def main(color1, color2, speed):
 
         # Compass
         while globals.direction != 'down' and globals.direction != 'up' and globals.direction != 'left' and globals.section == 3:
-            show_message_break("5:Compass", color1, speed)
+            show_message_break("4:Compass", color1, speed)
             get_joystick()
             if globals.direction == 'middle':
                 passed()
@@ -115,7 +115,7 @@ def main(color1, color2, speed):
 
         # Sensor temperature
         while globals.direction != 'down' and globals.direction != 'up' and globals.direction != 'left' and globals.section == 4:
-            show_message_break("6:Sensor temperature", color1, speed)
+            show_message_break("5:Sensor temperature", color1, speed)
             get_joystick()
             if globals.direction == 'left':
                 passed()
@@ -131,7 +131,7 @@ def main(color1, color2, speed):
 
         # Pressure
         while globals.direction != 'down' and globals.direction != 'up' and globals.direction != 'left' and globals.section == 5:
-            show_message_break("7:Pressure", color1, speed)
+            show_message_break("6:Pressure", color1, speed)
             get_joystick()
             if globals.direction == 'middle':
                 passed()
@@ -143,7 +143,7 @@ def main(color1, color2, speed):
 
         # Humidity
         while globals.direction != 'down' and globals.direction != 'up' and globals.direction != 'left' and globals.section == 6:
-            show_message_break("8:Humidity", color1, speed)
+            show_message_break("7:Humidity", color1, speed)
             get_joystick()
             if globals.direction == 'middle':
                 passed()
@@ -162,27 +162,31 @@ def compass():
 
     """
     state_changed = 0
+    #sense.set_imu_config(True, False, False)
     while True:
+        #orientation = sense.get_orientation_degrees()
+        #degrees = orientation['yaw']
         degrees = sense.get_compass()
+        print(degrees)
         if (degrees <= 15 or degrees >= 345) and state_changed != 1:
             sense.clear()
             sense.show_letter("N")
             state_changed = 1
         elif degrees >= 15 and degrees < 30 and state_changed != 2:
             sense.clear()
-            sense.show_letter("1")
+            sense.show_letter("a")
             state_changed = 2
         elif degrees >= 30 and degrees < 45 and state_changed != 3:
             sense.clear()
-            sense.show_letter("2")
+            sense.show_letter("b")
             state_changed = 3
         elif degrees >= 45 and degrees < 60 and state_changed != 4:
             sense.clear()
-            sense.show_letter("3")
+            sense.show_letter("c")
             state_changed = 4
         elif degrees >= 60 and degrees < 75 and state_changed != 5:
             sense.clear()
-            sense.show_letter("4")
+            sense.show_letter("d")
             state_changed = 5
         elif degrees >= 75 and degrees < 105 and state_changed != 6:
             sense.clear()
@@ -190,15 +194,15 @@ def compass():
             state_changed = 6
         elif degrees >= 105 and degrees < 120 and state_changed != 7:
             sense.clear()
-            sense.show_letter("6")
+            sense.show_letter("f")
             state_changed = 7
         elif degrees >= 135 and degrees < 150 and state_changed != 8:
             sense.clear()
-            sense.show_letter("7")
+            sense.show_letter("g")
             state_changed = 8
         elif degrees >= 150 and degrees < 165 and state_changed != 9:
             sense.clear()
-            sense.show_letter("8")
+            sense.show_letter("i")
             state_changed = 9
         elif degrees >= 165 and degrees < 195 and state_changed != 10:
             sense.clear()
@@ -206,15 +210,15 @@ def compass():
             state_changed = 10
         elif degrees >= 195 and degrees < 210 and state_changed != 11:
             sense.clear()
-            sense.show_letter("8")
+            sense.show_letter("k")
             state_changed = 11
         elif degrees >= 225 and degrees < 240 and state_changed != 12:
             sense.clear()
-            sense.show_letter("7")
+            sense.show_letter("l")
             state_changed = 12
         elif degrees >= 240 and degrees < 255 and state_changed != 13:
             sense.clear()
-            sense.show_letter("6")
+            sense.show_letter("m")
             state_changed = 13
         elif degrees >= 255 and degrees < 285 and state_changed != 14:
             sense.clear()
@@ -222,17 +226,17 @@ def compass():
             state_changed = 14
         elif degrees >= 285 and degrees < 300 and state_changed != 15:
             sense.clear()
-            sense.show_letter("4")
+            sense.show_letter("o")
             state_changed = 15
         elif degrees >= 300 and degrees < 315 and state_changed != 16:
             sense.clear()
-            sense.show_letter("3")
+            sense.show_letter("p")
             state_changed = 16
         elif degrees >= 315 and degrees < 330 and state_changed != 17:
             sense.clear()
-            sense.show_letter("2")
+            sense.show_letter("q")
             state_changed = 17
         elif degrees >= 330 and degrees < 345 and state_changed != 18:
             sense.clear()
-            sense.show_letter("1")
+            sense.show_letter("r")
             state_changed = 18

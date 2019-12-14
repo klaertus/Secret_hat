@@ -19,7 +19,7 @@ config.optionxform = str
 config.optionxform = lambda option: option
 
 
-# Copy pasted from https://github.com/SteveAmor/Raspberry-Pi-Sense-Hat-Clock/blob/master/clock.py
+# It's a shame copy from https://github.com/SteveAmor/Raspberry-Pi-Sense-Hat-Clock/blob/master/clock.py
 color1 = [100,0,0]
 color2 = [100,100,0]
 
@@ -124,7 +124,7 @@ def clock(color1, color2):
         #sense.low_light = True # Optional
         sense.set_pixels(clock_image)
 
-# End of copy pasted
+# End of shame copy
 
 
 while True:

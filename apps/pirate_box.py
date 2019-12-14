@@ -1,16 +1,16 @@
-from sense_hat import SenseHat
 from lib.init import *
 from lib import globals
 
 import os
 import time
 import psutil
+import subprocess
+
+
 
 """
 This application allows to start or stop apache2 service, to share files between connected clients
 """
-
-sense = SenseHat()
 
 def main(color1, color2, speed):
 
@@ -67,14 +67,8 @@ def main(color1, color2, speed):
                     pid.reverse()
                     pid = pid[1]
 
-                    connections = psutil.net_connections()
-                    users = 0
-                    for i in range(len(connections)):
-                        try:
-                            if connections[i][3].port == 80 or connections[i][3].port == 8080 or connections[i][3].port == 443:
-                                users+=1
-                        except:
-                            pass
+                    users = int(subprocess.Popen("netstat -ant | grep ESTABLISHED | grep :80 | wc -l", shell=True, stdout=subprocess.PIPE).stdout.read())
+
                     while globals.direction != 'middle':
                         show_message_break("Started:{} min".format(round((time.time()-globals.pirate_box_start_time)/60, 2)), color2, speed)
                         get_joystick()

@@ -56,16 +56,26 @@ def main(color1, color2, speed):
                 message = askmessage(color2, speed)
                 passed()
 
-                clear_password = askpassword(color1, color2, speed)             # Ask password
+                clear_password_2 = askpassword(color1, color2, speed)             # Ask password
                 passed()
 
-                if not clear_password == None:
-                    pass2 = 0
-                    while clear_password != pass2:
-                        show_message_break("Reenter password", color2, speed)
-                        get_joystick()
-                        if globals.direction == 'middle':
-                            pass2 = askpassword(color1, color2, speed)
+                if not clear_password_2 == None:
+                    clear_password = 0
+                    while globals.direction != 'left' and clear_password != clear_password_2:
+                            show_message_break("Reenter password! Press ok or left to return", color2, speed)
+                            get_joystick()
+                            if globals.direction == 'middle':
+                                clear_password = askpassword(color1, color2, speed)
+                    if globals.direction == 'left':
+                        passed()
+                        while globals.direction != 'middle' :               # Ask number of tries
+                            show_message_break("Cancelled! Press ok", color2, speed)
+                            get_joystick()
+                        passed()
+                        clear_password = None
+                        break
+
+
                     passed()
                     while globals.direction != 'middle' :               # Ask number of tries
                         show_message_break("Tries(0 to disabled)?", color2, speed)
@@ -205,10 +215,10 @@ def main(color1, color2, speed):
                                      loading_process.terminate()                # Stop the loading animation
 
                                      if tries == 0:               # If no tries set up
-                                         show_message_break("Incorrect", color2, speed)
+                                         show_message_break("Incorrect! Press return to cancel or ok to retry", color2, speed)
                                      elif remaining_tries > 0:
                                          remaining_tries -= 1
-                                         show_message_break("Incorrect, {} tries left".format(remaining_tries), color2, speed)              # Display tries left
+                                         show_message_break("Incorrect, {} tries left! Press return to cancel or ok to retry".format(remaining_tries), color2, speed)              # Display tries left
                                          messages.set('message{}'.format(msg_number), 'remaining_tries', str(remaining_tries))
                                          with open('apps/messages.ini', 'w') as configfile:
                                              messages.write(configfile)
@@ -276,7 +286,7 @@ def main(color1, color2, speed):
                                                 with open('apps/messages.ini', 'w') as configfile:
                                                     messages.write(configfile)
                                                 while (globals.direction != 'middle' and globals.direction != 'up'):
-                                                    show_message_break("Deleted!", color2, speed)
+                                                    show_message_break("Deleted! Press ok", color2, speed)
                                                     get_joystick()
                                                 passed()
                                                 globals.run = False

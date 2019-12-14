@@ -5,6 +5,7 @@ from multiprocessing import Process
 from time import sleep, time
 from math import floor
 from configparser import RawConfigParser
+from utils import *
 
 sense = SenseHat()
 config = RawConfigParser(allow_no_value=True)
@@ -236,9 +237,9 @@ def askmessage(color, speed):
             list_number.append(number)
         sense.clear()
         sleep(0.01)
-    passed()        #number = 0
-    return str(list_number)
+    passed()
 
+    return str(list_number)
 
 
 
@@ -300,8 +301,8 @@ def askpassword(color1, color2, speed):
 
     """
 
-    # Use compass, gyro and accelerometer
-    sense.set_imu_config(False, False, True)
+    # Use accelerometer
+    sense.set_imu_config(True, True, True)
 
 
     def accelerometer(color):
@@ -344,11 +345,11 @@ def askpassword(color1, color2, speed):
 
     directions = []
     while (globals.direction != 'middle' ):
-         show_message_break("Password? ", color2, speed)
+         show_message_break("Password? Press ok", color2, speed)
          get_joystick()
     passed()
     while (globals.direction != 'middle' ):
-         show_message_break("Turn your SecretHat and press ok to save a position. To finish or disabled password, press right", color2, speed)
+         show_message_break("Turn your SecretHat and press ok to view position! To save, press ok. To cancel press left. To finish (or disabled password), press right", color2, speed)
          get_joystick()
     passed()
 
