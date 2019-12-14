@@ -9,7 +9,7 @@ This project was developed as part of a competition organized by UClouvain. It c
 ```bash
 https://github.com/r4ma050/Secret_hat.git
 cd Secret_hat
-./install.sh
+./install.sh   # Not finished
 ```
 
 ## Applications
@@ -44,32 +44,49 @@ Simple backdoor using Facebook or Dataplicity.
 PHP file explorer in /shared to share files to another connected users. This app uses https://github.com/prasathmani/tinyfilemanager for the explorer.
 
 #### Setting
-Setting application allowing to set up Wifi (connect or AP), the main password, the brightness, the password precision (50 is default, 1 is too much precise), and reset the Secret Hat.
+Setting application allowing to set up Wifi (connect or AP), the iptables rules, the main password, the brightness, the password precision (50 is default, 1 is too much precise), shutdown, reboot and reset the Secret Hat.
 
 ## Configuration
 
-If the config.ini file doesn't exist, it is automatically created with defaults values. 
+If the config files don't exist or contain error, the Secret Hat will show a error, and ask you if you want to reset config files. Select Yes if it's first boot
+
 ### Wifi APs
-Add yours wifis APs to the config.ini, like this 
+
+Add yours wifis APs to the config.ini : 
 ```
 [wifi]
-ssid1 = key1
+ssid1         # Wifi with no key
 ssid2 = key2
 ssid3 = key3
 ```
 
 ### Reset configuration
 
-There are three resetting mode:
-* Mode 1 : reset only all configuration, and deletes all messages (mode 1)
+There are three resetting mode :
+* Mode 1 : reset only all configuration, and deletes all messages
 * Mode 2 : Delete all subsystem
-* Mode 3 : Only block during a exponential time (only for main password)
+* Mode 3 : Only block the Secret Hat (only for main password)
 
 ### Personalization
-Edit the colours of text and the speed of scrolling text in config.ini, like that
+
+Edit the colours of text and the speed of scrolling text in config.ini :
 ```
 [personalization]
 color1 = [255,255,0]  # List or tuple
 color2 = [0,255,0]  # List or tuple
 speed = 0.05  # Float
 ```
+### Iptables rules
+
+Add your own iptables rules in iptables_rules file :
+
+```
+# Rule name 1 
+rule command 1
+
+# Rule name 2
+rule command 2
+```
+If iptables_rule contains errors, the Secret Hat will show a error and returns in the Setting menu.
+
+
