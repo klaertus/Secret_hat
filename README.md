@@ -8,8 +8,7 @@ This project was developed as part of a competition organized by UClouvain. It c
 
 ```bash
 https://github.com/r4ma050/Secret_hat.git
-cd Secret_hat
-./install.sh   # Not finished
+cd Secret_hat./install.sh   # Not finished
 ```
 
 ## Applications
@@ -26,7 +25,7 @@ cd Secret_hat
 #### Message encryption
 Application allowing to encrypt messages with the positions of the Sense Hat. 
 
-| WARNING: Please consider that the lib used to encrypt messages and hash passwords is not secure, and has only been used as part of the competition! |
+| WARNING: Please consider that the lib used to encrypt messages and hash passwords is not secure! |
 | --- |
 #### System and board infos
 Application displaying informations about the Raspberry and the Sense hat.
@@ -38,10 +37,10 @@ Application allowing to record logs and informations (time, ip, ping, Sense Hat 
 A timer allowing to activate GPIOs, reset the Secret Hat or shutdown it.
 
 #### Backdoor
-Simple backdoor using Facebook or Dataplicity.
+Simple backdoor using Dataplicity.
 
 #### Pirate Box
-PHP file explorer in /shared to share files to another connected users. This app uses https://github.com/prasathmani/tinyfilemanager for the explorer.
+PHP file explorer to share files to another connected users. This app uses https://github.com/prasathmani/tinyfilemanager for the explorer.
 
 #### Setting
 Setting application allowing to set up Wifi (connect or AP), the iptables rules, the main password, the brightness, the password precision (50 is default, 1 is too much precise), shutdown, reboot and reset the Secret Hat.
