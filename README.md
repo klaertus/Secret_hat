@@ -60,9 +60,9 @@ ssid2 = key2
 ssid3 = key3
 ```
 
-### Reset configuration
+### Reset
 
-There are three resetting mode :
+There are three resetting modes :
 * Mode 1 : reset only all configuration, and deletes all messages
 * Mode 2 : Delete all subsystem
 * Mode 3 : Only block the Secret Hat (only for main password)
@@ -76,6 +76,7 @@ color1 = [255,255,0]  # List or tuple
 color2 = [0,255,0]  # List or tuple
 speed = 0.05  # Float
 ```
+
 ### Iptables rules
 
 Add your own iptables rules in iptables_rules file :
