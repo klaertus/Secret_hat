@@ -84,6 +84,7 @@ def main(color1, color2, speed):
                     tries = askmessage(color2, speed)
                     tries = int(tries.replace('[', '').replace(']', '').replace(',', '').replace(' ', ''))
                 else:
+                    clear_password = None
                     tries = 0
 
                 while (globals.direction != 'middle' ):             # Ask slot number

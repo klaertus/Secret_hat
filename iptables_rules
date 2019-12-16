@@ -1,6 +1,9 @@
 # Drop all input
 iptables --policy INPUT DROP
 
+# Accept all input
+iptables --policy OUTPUT ACCEPT
+
 # Accept all output
 iptables --policy OUTPUT ACCEPT
 

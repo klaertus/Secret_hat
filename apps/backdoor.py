@@ -19,16 +19,16 @@ def main(color1, color2, speed):
                 if os.path.isfile('/etc/supervisor/conf.d/tuxtunnel.conf'):
                     if os.system('systemctl is-active supervisor') == 0:
                         os.system('service supervisor stop')
-                        os.system('systemctl enable supervisor')
+                        os.system('systemctl disable supervisor')
                         while globals.direction != 'middle':
-                            show_message_break("Dataplicity stopped", color2, speed)
+                            show_message_break("Dataplicity stopped! Press ok", color2, speed)
                             get_joystick()
                         passed()
                     else:
                         os.system('service supervisor start')
-                        os.system('systemctl disable supervisor')
+                        os.system('systemctl enable supervisor')
                         while globals.direction != 'middle':
-                            show_message_break("Dataplicity stopped! Press ok", color2, speed)
+                            show_message_break("Dataplicity started! Press ok", color2, speed)
                             get_joystick()
                         passed()
                 else:

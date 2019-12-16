@@ -1,0 +1,7 @@
+clock :  https://github.com/SteveAmor/Raspberry-Pi-Sense-Hat-Clock/blob/master/clock.py
+wireless : https://github.com/joshvillbrandt/wireless
+crypto : provided on the moodle
+dataplicity : https://www.dataplicity.com/
+netifaces https://github.com/al45tair/netifaces
+snake : https://github.com/NeilBaner/sense-hat-games/blob/master/snake
+tiny file explorer : https://github.com/prasathmani/tinyfilemanager
