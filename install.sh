@@ -54,7 +54,7 @@ echo 'wpa_pairwise=TKIP' >> /etc/hostapd/hostapd.conf
 echo 'rsn_pairwise=CCMP' >> /etc/hostapd/hostapd.conf
 sed -i 's/#DAEMON_CONF/DAEMON_CONF="\/etc\/hostapd\/hostapd.conf"/g' /etc/default/hostapd
 
-sed -i 's/#net.ipv4.ip_forward=1/net.ipv4.ip_forward=1/g' /etc/default/hostapd
+sed -i 's/#net.ipv4.ip_forward=1/net.ipv4.ip_forward=1/g' /etc/sysctl.conf
 iptables -t nat -A  POSTROUTING -o eth0 -j MASQUERADE
 sh -c "iptables-save > /etc/iptables.ipv4.nat"
 
@@ -63,6 +63,6 @@ echo 'iptables-restore < /etc/iptables.ipv4.nat' >> /etc/rc.local
 sudo systemctl unmask hostapd
 sudo systemctl enable hostapd
 #sudo systemctl start hostapd
-sudo reboot
+read -p "Please install Dataplicy for the backdoor : https://www.dataplicity.com/. Press [Enter] key to reboot"
 
-echo Please install Dataplicy for the backdoor : https://www.dataplicity.com/
+sudo reboot
