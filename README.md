@@ -1,14 +1,15 @@
 # Secret Hat
 A Raspberry Pi subsystem for the Sense Hat
 
-This project was developed as part of a competition organized by UClouvain. It contains many applications for a potential intelligence agency, adapted to be used on the Sense Hat.
+This project contains many applications for a potential intelligence agency, adapted to be used on the Sense Hat.
 
 
 ## Installation
 
 ```bash
 https://github.com/r4ma050/Secret_hat.git
-cd Secret_hat./install.sh   # Not finished
+cd Secret_hat
+./install.sh   # Not finished
 ```
 
 ## Applications
