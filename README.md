@@ -1,7 +1,7 @@
 # Secret Hat
 A Raspberry Pi subsystem for the Sense Hat
 
-This project contains many applications for a potential intelligence agency, adapted to be used on the Sense Hat.
+This project is a subsystem that contains many applications for a potential intelligence agency, adapted to be used on the Sense Hat.
 
 
 ## Installation
@@ -21,7 +21,6 @@ cd Secret_hat
 *  Backdoor
 *  Pirate box
 *  Settings
-
 
 #### Message encryption
 Application allowing to encrypt messages with the positions of the Sense Hat. 
@@ -46,6 +45,7 @@ PHP file explorer to share files to another connected users. This app uses https
 #### Setting
 Setting application allowing to set up Wifi (connect or AP), the iptables rules, the main password, the brightness, the password precision (50 is default, 1 is too much precise), shutdown, reboot and reset the Secret Hat.
 
+
 ## Configuration
 
 If the config files don't exist or contain error, the Secret Hat will show a error, and ask you if you want to reset config files. Select Yes if it's first boot
@@ -63,9 +63,9 @@ ssid3 = key3
 ### Reset
 
 There are three resetting modes :
-* Mode 1 : reset only all configuration, and deletes all messages
-* Mode 2 : Delete all subsystem
-* Mode 3 : Only block the Secret Hat (only for main password)
+* Mode 1 : reset all configuration, and delete all messages
+* Mode 2 : delete all subsystem
+* Mode 3 : block the Secret Hat (only for main password)
 
 ### Personalization
 
