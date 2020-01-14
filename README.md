@@ -48,7 +48,7 @@ Setting application allowing to set up Wifi (connect or AP), the iptables rules,
 
 ## Configuration
 
-If the config files don't exist or contain error, the Secret Hat will show a error, and ask you if you want to reset config files. Select Yes if it's first boot
+If the config files doesn't exist or contain error, the Secret Hat will show a error, and ask you if you want to reset config files. Select Yes if it's first boot
 
 ### Wifi APs
 
@@ -69,7 +69,7 @@ There are three resetting modes :
 
 ### Personalization
 
-Edit the colours of text and the speed of scrolling text in config.ini :
+Edit the text color and the text scrolling speed in config.ini :
 ```
 [personalization]
 color1 = [255,255,0]  # List or tuple
@@ -88,6 +88,6 @@ rule command 1
 # Rule name 2
 rule command 2
 ```
-If iptables_rule contains errors, the Secret Hat will show a error and returns in the Setting menu.
+If iptables_rule contains errors, the Secret Hat will show a error and return in the Setting menu.
 
 
