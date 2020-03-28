@@ -7,7 +7,7 @@ This project is a subsystem that contains many applications for a potential inte
 ## Installation
 
 ```bash
-https://github.com/r4ma050/Secret_hat.git
+https://github.com/charl050/Secret_hat.git
 cd Secret_hat
 ./install.sh   # Not finished
 ```
