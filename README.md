@@ -1,7 +1,7 @@
 # Secret Hat
 A Raspberry Pi subsystem for the Sense Hat
 
-This project is a subsystem that contains many applications for a potential intelligence agency, adapted to be used on the Sense Hat.
+This project is a subsystem that contains many useful applications, adapted to be used on the Sense Hat.
 
 
 ## Installation
