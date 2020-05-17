@@ -40,7 +40,7 @@ A timer allowing to activate GPIOs, reset the Secret Hat or shutdown it.
 Simple backdoor using Dataplicity.
 
 #### Pirate Box
-PHP file explorer to share files to another connected users. This app uses https://github.com/prasathmani/tinyfilemanager for the explorer.
+PHP file explorer to share files with another connected users. This app uses https://github.com/prasathmani/tinyfilemanager for the explorer.
 
 #### Setting
 Setting application allowing to set up Wifi (connect or AP), the iptables rules, the main password, the brightness, the password precision (50 is default, 1 is too much precise), shutdown, reboot and reset the Secret Hat.
