@@ -7,7 +7,7 @@ This project is a subsystem that contains many useful applications, adapted to b
 ## Installation
 
 ```bash
-https://github.com/charl050/Secret_hat.git
+git clone https://github.com/charl050/Secret_hat.git
 cd Secret_hat
 ./install.sh   # Not finished
 ```
