@@ -23,15 +23,13 @@ cd Secret_hat
 *  Settings
 
 #### Message encryption
-Application for encrypting messages with the positions of the Sense Hat. 
+Application to encrypt messages with the positions of the Sense Hat. 
 
-| WARNING: Please consider that the lib used to encrypt messages and hash passwords is not secure! |
-| --- |
 #### System and board infos
 Application displaying informations about the Raspberry and the Sense hat.
 
 #### Tracking infos
-Application for recording logs and informations (time, ip, ping, Sense Hat temperature, pressure, humidity, orientation, compass, accelerometer, gyroscope and traceroute) and save them in saved_logs.txt.
+Application to record informations (time, ip, ping, Sense Hat temperature, pressure, humidity, orientation, compass, accelerometer, gyroscope and traceroute) and save them in saved_logs.txt.
 
 #### Timer
 A timer allowing to activate GPIOs, reset the Secret Hat or shutdown it.
@@ -40,15 +38,15 @@ A timer allowing to activate GPIOs, reset the Secret Hat or shutdown it.
 Simple backdoor using Dataplicity.
 
 #### Pirate Box
-PHP file explorer for sharing files with another connected users. This app uses https://github.com/prasathmani/tinyfilemanager for the explorer.
+A PHP file explorer to share files with another connected users. This app uses https://github.com/prasathmani/tinyfilemanager for the explorer.
 
 #### Setting
-Setting application allowing to set up Wifi (connect or AP), the iptables rules, the main password, the brightness, the password precision (50 is default, 1 is too much precise), shutdown, reboot and reset the Secret Hat.
+Settings application to set up Wifi (connect or AP), the iptables rules, the main password, the brightness, the password precision (50 is default, 1 is too much precise), shutdown, reboot and reset the Secret Hat.
 
 
 ## Configuration
 
-If the config files doesn't exist or contain error, the Secret Hat will show a error, and ask you if you want to reset config files. Select Yes if it's first boot
+If the config file doesn't exist or contains  errors, the Secret Hat will show an error, and ask you if you want to reset the config file. Select Yes if it's the first boot
 
 ### Wifi APs
 
