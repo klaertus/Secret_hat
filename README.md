@@ -1,7 +1,7 @@
 # Secret Hat
 A Raspberry Pi subsystem for the Sense Hat
 
-This project is a subsystem that contains many useful applications, adapted to be used on the Sense Hat.
+This project is a subsystem for the Sense Hat that contains many useful applications.
 
 
 ## Installation
@@ -23,16 +23,16 @@ cd Secret_hat
 *  Settings
 
 #### Message encryption
-Application to encrypt messages with the positions of the Sense Hat. 
+Encrypt messages with the positions of the Sense Hat. 
 
 #### System and board infos
-Application displaying informations about the Raspberry and the Sense hat.
+Display informations about the Raspberry and the Sense hat.
 
 #### Tracking infos
-Application to record informations (time, ip, ping, Sense Hat temperature, pressure, humidity, orientation, compass, accelerometer, gyroscope and traceroute) and save them in saved_logs.txt.
+Record informations (time, ip, ping, Sense Hat temperature, pressure, humidity, orientation, compass, accelerometer, gyroscope and traceroute) and save them in saved_logs.txt.
 
 #### Timer
-A timer allowing to activate GPIOs, reset the Secret Hat or shutdown it.
+Timer allowing to activate GPIOs, reset the Secret Hat or shutdown it.
 
 #### Backdoor
 Simple backdoor using Dataplicity.
@@ -41,7 +41,7 @@ Simple backdoor using Dataplicity.
 A PHP file explorer to share files with another connected users. This app uses https://github.com/prasathmani/tinyfilemanager for the explorer.
 
 #### Setting
-Settings application to set up Wifi (connect or AP), the iptables rules, the main password, the brightness, the password precision (50 is default, 1 is too much precise), shutdown, reboot and reset the Secret Hat.
+Set up Wifi (connect or AP), the iptables rules, the main password, the brightness, the password precision (50 is default, 1 is too much precise), shutdown, reboot and reset the Secret Hat.
 
 
 ## Configuration
